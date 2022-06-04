@@ -1,0 +1,60 @@
+<button type="button" class="btn btn-success" (click)="showCreateModal(modal)">+ Create</button>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Title</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let conference of conferences$ | async">
+      <td>{{conference.id}}</td>
+      <td>{{conference.title}}</td>
+      <td>
+        <button (click)="showUpdateModal(modal, conference)" type="button" class="btn btn-light">Update</button>
+        <button (click)="showDeleteModal(modalConfirmDelete, conference)" type="button" class="btn btn-danger">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #modalConfirmDelete let-modalConfirmDelete>
+  <div class="modal-header">
+    <h4 class="modal-title">Delete</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modalConfirmDelete.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <p>Delete {{ activeConference.title }}?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modalConfirmDelete.close(activeConference)">Yes</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modalConfirmDelete.dismiss()">No</button>
+  </div>
+</ng-template>
+
+<ng-template #modal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Conference</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input [(ngModel)]="activeConference.title" name="title" type="text" class="form-control" id="title">
+      </div>
+      <div class="mb-3">
+        <label for="dateOfBirth">Date</label>
+        <div class="input-group">
+          <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+          <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close(activeConference)">Save</button>
+  </div>
+</ng-template>

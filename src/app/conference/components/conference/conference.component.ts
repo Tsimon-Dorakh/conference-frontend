@@ -2,12 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { ConferenceService } from '../../services/conference.service'
 import { firstValueFrom, Observable } from 'rxjs'
 import { Conference } from '../../models/conference.model'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbDateAdapter, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { CustomDateParserFormatter } from '../ngbDatepicker/CustomDateParserFormatter'
+import { CustomAdapter } from '../ngbDatepicker/CustomAdapter'
 
 @Component({
   selector: 'app-conference',
   templateUrl: './conference.component.html',
-  styleUrls: ['./conference.component.scss']
+  styleUrls: ['./conference.component.scss'],
+  providers: [
+    {provide: NgbDateAdapter, useClass: CustomAdapter},
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}
+  ]
 })
 export class ConferenceComponent implements OnInit {
   public conferences$: Observable<Conference[]>;

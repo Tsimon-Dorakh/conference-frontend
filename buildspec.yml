@@ -1,0 +1,21 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: '14.x'
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 484726675287.dkr.ecr.eu-central-1.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm install -g @angular/cli@latest
+      - npm install
+      - ng build --configuration=production
+      - docker build -t conference-frontend .
+      - docker tag conference-frontend:latest 484726675287.dkr.ecr.eu-central-1.amazonaws.com/conference-frontend:latest
+      - docker push 484726675287.dkr.ecr.eu-central-1.amazonaws.com/conference-frontend:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
